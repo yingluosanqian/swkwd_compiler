@@ -5,7 +5,7 @@
 #include "swkwd_parser.tab.h"
 %}
 
-IDENTIFIER [a-z][a-z0-9]+
+IDF [a-z][a-z0-9]+
 OP [+-*/=]
 NUMBER [0-9]+
 WHITESPACE [ \t]
@@ -17,7 +17,7 @@ OP { return yytext[0]; }
 
 NUMBER { yylval.d = atoi(yytext); return NUMBER;}
 
-IDENTIFIER { yylval.s = yytext; return IDENTIFIER; }
+IDF { yylval.s = yytext; return IDF; }
 
 \n { return EOLN; }
 

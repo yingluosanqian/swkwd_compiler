@@ -83,7 +83,7 @@ Ast newId(char* val) {
     exit(0);
   }
 
-  res->tokenType = ID;
+  res->tokenType = IDF;
   res->val = val;
   return (Ast)res;
 }
@@ -126,7 +126,7 @@ T evalAst(Ast ast) {
     case NUM:
       v = ((struct Number *)ast)->val;
       break;
-    case ID:
+    case IDF:
       char *name = ((struct Identifier *)ast)->val;
       struct IdentifierSymbol* id = getSym(name);
       if(id == NULL) {
