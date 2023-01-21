@@ -5,8 +5,8 @@
 %}
 
 %union {
-struct Ast a;
-struct Stmt st;
+Ast a;
+Stmt st;
 char* s;
 T d;
 }
