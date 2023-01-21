@@ -6,7 +6,7 @@
 #include "ast.h"
 
 // 哈希
-static unsgined hash(char *s) {
+static unsigned hash(char *s) {
   unsigned int hash = 0;
   unsigned c;
   while (c = *s++) hash = hash * 9 ^ c;
@@ -22,7 +22,7 @@ struct IdentifierSymbol* getSym(char *s) {
       return res;
     }
     if (!res->name) {
-        return NULL;
+      return NULL;
     }
     if(++res >= symtab + NHASH) res = symtab;
   }
@@ -31,7 +31,7 @@ struct IdentifierSymbol* getSym(char *s) {
 }
 
 // 修改变量的值
-int setSym(char *s, T val) {
+void setSym(char *s, T val) {
   struct IdentifierSymbol *res = &symtab[hash(s) % NHASH];
   int scount = NHASH;
   while (--scount >= 0) {
@@ -51,7 +51,7 @@ int setSym(char *s, T val) {
 }
 
 // 构造抽象语法树
-Ast newAst(int tokentype, Ast left, Ast right) {
+Ast newAst(int tokenType, Ast left, Ast right) {
   Ast res = malloc(sizeof(struct AbstractSyntaxTree));
   if (!res) {
     yyerror("Insufficient memory space.");
@@ -83,7 +83,7 @@ Ast newId(char* val) {
     exit(0);
   }
 
-  res->tokenType = IDF;
+  res->tokenType = ID;
   res->val = val;
   return (Ast)res;
 }
@@ -121,14 +121,14 @@ void freeStmt(Stmt stmt) {
 
 // 遍历抽象语法树
 T evalAst(Ast ast) {
-  T v = 0;
+  T v = 0, val_r;
   switch (ast->tokenType) {
     case NUM:
       v = ((struct Number *)ast)->val;
       break;
     case ID:
       char *name = ((struct Identifier *)ast)->val;
-      struct IdentifierSymbol* id = getSym(name);
+      struct IdentifierSymbol *id = getSym(name);
       if(id == NULL) {
         yyerror("Undefined identifier %s.", name);
         abort();
@@ -149,7 +149,7 @@ T evalAst(Ast ast) {
       v = eval(ast->left) * eval(ast->right);
       break;
     case '/':
-      int val_r = eval(ast->right);
+      val_r = eval(ast->right);
       if (val_r == 0) {
         yyerror("Divide by 0.");
         abort();
@@ -157,8 +157,8 @@ T evalAst(Ast ast) {
       v = eval(ast->left) / eval(ast->right);
       break;
     case '=':
-      int val_r = eval(ast->right);
-      char* name = ((struct Identifier *)(ast->left))->val;
+      val_r = eval(ast->right);
+      char *name = ((struct Identifier *)(ast->left))->val;
       setSym(name, val_r);
       break;
     default:

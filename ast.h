@@ -50,7 +50,7 @@ Stmt newStmt(Ast ast);
 Stmt mergeStmt(Stmt stmt1, Stmt stmt2);
 
 void evalStmt(Stmt);
-void evalAst(Ast);
+T evalAst(Ast);
 
 void freeAst(Ast);
-void freeStmt(Ast);
+void freeStmt(Stmt);
