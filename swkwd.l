@@ -2,7 +2,7 @@
 
 %{
 #include "ast.h"
-#include "swkwd_parser.tab.h"
+#include "swkwd.tab.h"
 %}
 
 IDENTIFIER [a-z][a-z0-9]+
