@@ -159,7 +159,7 @@ T evalAst(Ast ast) {
       break;
     case '=':
       val_r = eval(ast->right);
-      *name = ((struct Identifier *)(ast->left))->val;
+      name = ((struct Identifier *)(ast->left))->val;
       setSym(name, val_r);
       break;
     default:
