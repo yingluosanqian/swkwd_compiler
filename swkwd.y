@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 #include "ast.h"
 
 int yylex();
@@ -9,6 +10,7 @@ int yylex();
 %union {
 Ast a;
 Stmt st;
+char *s;
 T d;
 }
 
@@ -17,14 +19,14 @@ T d;
 %nonassoc UMINUS
 
 %token <d> NUMBER
-%token EOLN FINISH
+%token EOLN
 %token <s> IDENTIFIER
 
 %type <st> stmts stmt
 %type <a> expr
 
 %%
-program : stmts FINISH {
+program : stmts {
   evalStmt($1);
   freeStmt($1);
 }
@@ -37,6 +39,8 @@ stmt : IDENTIFIER '=' expr EOLN { $$ = newStmt(newAst('=', newId($1), $3)); }
 
 expr : expr '+' expr { $$ = newAst('+', $1, $3); }
   | expr '-' expr { $$ = newAst('-', $1, $3); }
+  | expr '*' expr { $$ = newAst('*', $1, $3); }
+  | expr '/' expr { $$ = newAst('/', $1, $3); }
   | '(' expr ')' { $$ = $2; }
   | '-' expr %prec UMINUS {$$ = newAst(NEG, $2, NULL); }
   | IDENTIFIER { $$ = newId($1); }
@@ -54,5 +58,7 @@ void yyerror(char*s, ...) {
 
 int main(int argc, char* argv[]) {
   yyparse();
+  emitSymbol();
+
   return 0;
 }

@@ -1,3 +1,6 @@
+#ifndef __AST_H
+#define __AST_H
+
 extern int yylineno;
 
 // 类型定义
@@ -17,9 +20,9 @@ struct IdentifierSymbol {
     T val;
 };
 #define NHASH 9997
-struct IdentifierSymbol symtab[NHASH];
 struct IdentifierSymbol *getSym(char *s);
 void setSym(char *s, T val);
+void emitSymbol();
 
 // 抽象语法树
 typedef struct AbstractSyntaxTree {
@@ -54,3 +57,5 @@ T evalAst(Ast);
 
 void freeAst(Ast);
 void freeStmt(Stmt);
+
+#endif

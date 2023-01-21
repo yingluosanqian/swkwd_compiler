@@ -1,3 +1,6 @@
+#ifndef __AST_C
+#define __AST_C
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -12,6 +15,8 @@ static unsigned hash(char *s) {
   while (c = *s++) hash = hash * 9 ^ c;
   return hash;
 }
+
+static struct IdentifierSymbol symtab[NHASH];
 
 // 查询变量是否存在
 struct IdentifierSymbol* getSym(char *s) {
@@ -50,6 +55,16 @@ void setSym(char *s, T val) {
   abort();
 }
 
+// 输出符号表
+void emitSymbol() {
+  int i;
+  for (i = 0; i < NHASH; i++) {
+    if (symtab[i].name != 0) {
+      printf("%s %d\n", symtab[i].name, symtab[i].val);
+    }
+  }
+}
+
 // 构造抽象语法树
 Ast newAst(int tokenType, Ast left, Ast right) {
   Ast res = malloc(sizeof(struct AbstractSyntaxTree));
@@ -84,7 +99,7 @@ Ast newId(char* val) {
   }
 
   res->tokenType = ID;
-  res->val = val;
+  res->val = strdup(val);
   return (Ast)res;
 }
 
@@ -121,6 +136,7 @@ void freeStmt(Stmt stmt) {
 
 // 遍历抽象语法树
 T evalAst(Ast ast) {
+  // printf("token: %d\n", ast->tokenType);
   T v = 0, val_r;
   char *name;
   switch (ast->tokenType) {
@@ -161,6 +177,7 @@ T evalAst(Ast ast) {
       val_r = evalAst(ast->right);
       name = ((struct Identifier *)(ast->left))->val;
       setSym(name, val_r);
+      val_r = evalAst(ast->left);
       break;
     default:
       yyerror("Unknown token [%d].", ast->tokenType);
@@ -175,3 +192,5 @@ void evalStmt(Stmt stmt) {
     }
     evalAst(stmt->ast);
 }
+
+#endif
