@@ -138,27 +138,27 @@ T evalAst(Ast ast) {
       }
       break;
     case NEG:
-      v = -eval(ast->left);
+      v = -evalAst(ast->left);
       break;
     case '+':
-      v = eval(ast->left) + eval(ast->right);
+      v = evalAst(ast->left) + evalAst(ast->right);
       break;
     case '-':
-      v = eval(ast->left) - eval(ast->right);
+      v = evalAst(ast->left) - evalAst(ast->right);
       break;
     case '*':
-      v = eval(ast->left) * eval(ast->right);
+      v = evalAst(ast->left) * evalAst(ast->right);
       break;
     case '/':
-      val_r = eval(ast->right);
+      val_r = evalAst(ast->right);
       if (val_r == 0) {
         yyerror("Divide by 0.");
-        abort();
+        evalAst();
       }
-      v = eval(ast->left) / eval(ast->right);
+      v = evalAst(ast->left) / evalAst(ast->right);
       break;
     case '=':
-      val_r = eval(ast->right);
+      val_r = evalAst(ast->right);
       name = ((struct Identifier *)(ast->left))->val;
       setSym(name, val_r);
       break;
