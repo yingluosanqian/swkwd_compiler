@@ -1,4 +1,4 @@
-%option noyywrap nodefault yylineno case-insensitive
+%option noyywrap yylineno case-insensitive
 
 %{
 #include <string.h>
@@ -17,10 +17,9 @@ EMPTYLINE ^[ \t]*\n
 {OP} { return yytext[0]; }
 {NUMBER} { yylval.d = atoi(yytext); return NUMBER;}
 {IDENTIFIER} { yylval.s = strdup(yytext); return IDENTIFIER; }
+{EMPTYLINE} {}
 \n { return EOLN; }
 {NOTES} {}
-{EMPTYLINE} {}
-<<EOF>> {return 0;}
 {WHITESPACE} {}
 . { yyerror("Unknown character [%c].\n", yytext[0]); }
 %%

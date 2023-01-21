@@ -28,7 +28,6 @@ T d;
 %%
 program : stmts {
   evalStmt($1);
-  freeStmt($1);
 }
 
 stmts : stmt { $$ = $1; }

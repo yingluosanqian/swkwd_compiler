@@ -1,0 +1,3 @@
+bison -d swkwd.y
+flex swkwd.l
+gcc -o compiler swkwd.tab.c lex.yy.c ast.c
