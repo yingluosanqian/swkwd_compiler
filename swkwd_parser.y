@@ -17,7 +17,7 @@ T d;
 
 %token <d> NUMBER
 %token EOLN FINISH
-%token <s> IDF
+%token <s> IDENTIFIER
 
 %type <st> stmts stmt
 %type <a> expr
@@ -31,14 +31,14 @@ program : stmts FINISH {
 stmts : stmt { $$ = $1); }
   | stmts stmt { $$ = mergeStmt($1, $2); }
 ;
-stmt : IDF '=' expr EOLN { $$ = newStmt(newAst('=', $1, $3)); }
+stmt : IDENTIFIER '=' expr EOLN { $$ = newStmt(newAst('=', $1, $3)); }
 ;
 
 expr : expr '+' expr { $$ = newAst('+', $1, $3); }
   | expr '-' expr { $$ = newAst('-', $1, $3); }
   | '(' expr ')' { $$ = $2; }
   | '-' expr %prec UMINUS {$$ = newast(NEG, $2, NULL); }
-  | IDF { $$ = newId($1); }
+  | IDENTIFIER { $$ = newId($1); }
   | NUMBER { $$ = newNum($1); }
 ;
 %%

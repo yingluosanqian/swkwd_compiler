@@ -126,7 +126,7 @@ T evalAst(Ast ast) {
     case NUM:
       v = ((struct Number *)ast)->val;
       break;
-    case IDF:
+    case ID:
       char *name = ((struct Identifier *)ast)->val;
       struct IdentifierSymbol* id = getSym(name);
       if(id == NULL) {

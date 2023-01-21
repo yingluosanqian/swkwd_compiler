@@ -4,7 +4,7 @@ extern int yylineno;
 #define T int
 
 // token 编号
-#define IDF 258
+#define ID 258
 #define NUM 259
 #define NEG 260
 
