@@ -37,12 +37,12 @@ void setSym(char *s, T val) {
   while (--scount >= 0) {
     if (res->name && !strcmp(res->name, s)) {
       res->val = val;
-      return 1;
+      return;
     }
     if (!res->name) {
       res->name = strdup(s);
       res->val = val;
-      return 0;
+      return;
     }
     if (++res >= symtab + NHASH) res = symtab;
   }
@@ -122,12 +122,13 @@ void freeStmt(Stmt stmt) {
 // 遍历抽象语法树
 T evalAst(Ast ast) {
   T v = 0, val_r;
+  char *name;
   switch (ast->tokenType) {
     case NUM:
       v = ((struct Number *)ast)->val;
       break;
-    case ID:
-      char *name = ((struct Identifier *)ast)->val;
+    case ID:;
+      name = ((struct Identifier *)ast)->val;
       struct IdentifierSymbol *id = getSym(name);
       if(id == NULL) {
         yyerror("Undefined identifier %s.", name);
@@ -158,7 +159,7 @@ T evalAst(Ast ast) {
       break;
     case '=':
       val_r = eval(ast->right);
-      char *name = ((struct Identifier *)(ast->left))->val;
+      *name = ((struct Identifier *)(ast->left))->val;
       setSym(name, val_r);
       break;
     default:
