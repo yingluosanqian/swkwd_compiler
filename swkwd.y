@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ast.h"
+
+int yylex();
 %}
 
 %union {
@@ -28,7 +30,7 @@ program : stmts FINISH {
   freeStmt($1);
 }
 
-stmts : stmt { $$ = $1); }
+stmts : stmt { $$ = $1; }
   | stmts stmt { $$ = mergeStmt($1, $2); }
 ;
 stmt : IDENTIFIER '=' expr EOLN { $$ = newStmt(newAst('=', $1, $3)); }
@@ -37,7 +39,7 @@ stmt : IDENTIFIER '=' expr EOLN { $$ = newStmt(newAst('=', $1, $3)); }
 expr : expr '+' expr { $$ = newAst('+', $1, $3); }
   | expr '-' expr { $$ = newAst('-', $1, $3); }
   | '(' expr ')' { $$ = $2; }
-  | '-' expr %prec UMINUS {$$ = newast(NEG, $2, NULL); }
+  | '-' expr %prec UMINUS {$$ = newAst(NEG, $2, NULL); }
   | IDENTIFIER { $$ = newId($1); }
   | NUMBER { $$ = newNum($1); }
 ;
@@ -52,11 +54,6 @@ void yyerror(char*s, ...) {
 }
 
 int main(int argc, char* argv[]) {
-  if (argc != 2) {
-    fprintf(stderr, "Usage: swkwd_compiler [inputfile]");
-  } else {
-    yyin = argv[1];
-    re
-  }
+  yyparse();
   return 0;
 }
