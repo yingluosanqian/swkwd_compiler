@@ -9,7 +9,6 @@ int yylex();
 %union {
 Ast a;
 Stmt st;
-char* s;
 T d;
 }
 
@@ -33,7 +32,7 @@ program : stmts FINISH {
 stmts : stmt { $$ = $1; }
   | stmts stmt { $$ = mergeStmt($1, $2); }
 ;
-stmt : IDENTIFIER '=' expr EOLN { $$ = newStmt(newAst('=', $1, $3)); }
+stmt : IDENTIFIER '=' expr EOLN { $$ = newStmt(newAst('=', newId($1), $3)); }
 ;
 
 expr : expr '+' expr { $$ = newAst('+', $1, $3); }
