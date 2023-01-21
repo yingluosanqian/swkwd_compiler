@@ -153,7 +153,7 @@ T evalAst(Ast ast) {
       val_r = evalAst(ast->right);
       if (val_r == 0) {
         yyerror("Divide by 0.");
-        evalAst();
+        abort();
       }
       v = evalAst(ast->left) / evalAst(ast->right);
       break;
